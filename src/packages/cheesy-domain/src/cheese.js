@@ -1,7 +1,9 @@
 const uuid = require('uuid/v4');
-const { fromJS, Map } = require('immutable');
+const { fromJS, Map, Record } = require('immutable');
 
 const { CheeseAdded, CheeseRemoved } = require('cheesy-messages');
+
+import Stock from './stock';
 
 const ID = 'id';
 const NAME = 'name';
@@ -9,19 +11,20 @@ const DESCRIPTION = 'description';
 const VALID = 'valid';
 const FROM = 'from';
 const TO = 'to';
+const LIFESPAN = 'lifespan';
+
+const DateRange = new Record({ [FROM]: null, [TO]: null });
 
 function Cheese({ id = uuid() } = {}) {
 
   // State -----------------------------------------------------------------------------------------
 
-  let _state = fromJS({
+  let _state = Map({
     [ID]: id,
     [NAME]: '',
     [DESCRIPTION]: '',
-    [VALID]: {
-      [FROM]: null,
-      [TO]: null,
-    },
+    [LIFESPAN]: 0,
+    [VALID]: new DateRange(),
   });
 
   this.getState = () => _state;
@@ -48,8 +51,13 @@ function Cheese({ id = uuid() } = {}) {
 
   this.getId = () => _state.get(ID);
   this.getName = () => _state.get(NAME);
+  this.getReference = () => ({
+    [ID]: this.getId(),
+    [NAME]: this.getName(),
+  });
   this.getDescription = () => _state.get(DESCRIPTION);
   this.getValid = () => _state.get(VALID).toJSON();
+  this.getLifeSpan = () => _state.get(LIFESPAN);
 
   // Methods ---------------------------------------------------------------------------------------
 
@@ -63,10 +71,11 @@ function Cheese({ id = uuid() } = {}) {
    * @returns {this}
    */
 
-  this.add = ({ name, description, date = new Date() } = {}) => {
+  this.add = ({ name, description, lifespan, date = new Date() } = {}) => {
     // param validation
     if (typeof name !== 'string' || name.length === 0) throw new Error('Invalid Argument: name');
     if (typeof description !== 'string' || description.length === 0) throw new Error('Invalid Argument: name');
+    if (typeof lifespan !== 'number' || lifespan <= 0) throw new Error('Invalid Argument: lifespan');
     // operation validation
     if (_state.getIn([VALID, FROM]) !== null)
       throw new Error('Cheese already added');
@@ -75,6 +84,7 @@ function Cheese({ id = uuid() } = {}) {
     _state = _state.merge({
       [NAME]: name,
       [DESCRIPTION]: description,
+      [LIFESPAN]: lifespan,
       [VALID]: Map({
         [FROM]: date,
         [TO]: null,
@@ -107,6 +117,7 @@ function Cheese({ id = uuid() } = {}) {
 
     return this;
   };
+
 }
 
 module.exports = Cheese;

@@ -14,7 +14,7 @@
     "lib"
   ],
   "scripts": {
-    "test": "jest --notify --notifyMode fail-change"
+    "test": "jest --notify --notifyMode failure-change"
   },
   "dependencies": {
     "@babel/preset-env": "^7.2.3",
