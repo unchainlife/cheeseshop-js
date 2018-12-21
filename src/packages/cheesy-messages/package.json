@@ -1,0 +1,19 @@
+{
+  "name": "cheesy-messages",
+  "version": "1.0.0",
+  "description": "> TODO: description",
+  "author": "Chris Kemp <chris.kemp3000@gmail.com>",
+  "homepage": "",
+  "license": "ISC",
+  "main": "src/index.js",
+  "directories": {
+    "lib": "lib",
+    "test": "__tests__"
+  },
+  "files": [
+    "lib"
+  ],
+  "scripts": {
+    "test": "echo \"Error: run tests from root\" && exit 1"
+  }
+}
