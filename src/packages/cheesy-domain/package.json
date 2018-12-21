@@ -14,10 +14,13 @@
     "lib"
   ],
   "scripts": {
-    "test": "echo \"Error: run tests from root\" && exit 1"
+    "test": "jest --notify --notifyMode fail-change"
   },
   "dependencies": {
     "immutable": "^4.0.0-rc.12",
     "uuid": "^3.3.2"
+  },
+  "devDependencies": {
+    "jest": "^23.6.0"
   }
 }
