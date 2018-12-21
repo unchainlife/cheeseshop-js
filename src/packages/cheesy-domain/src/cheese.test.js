@@ -31,11 +31,12 @@ describe('Cheese', () => {
       const description = 'Brie is a soft cow\'s-milk cheese named after Brie, the French region from which it originated. It is pale in color with a slight grayish tinge under a rind of white mould. The rind is typically eaten, with its flavor depending largely upon the ingredients used and its manufacturing environment.';
       const date = new Date();
       const subject = new Cheese({ id });
+      const priorState = subject.toJSON();
 
       subject.add({ name, description, date });
 
       expect(subject.toJSON()).toEqual({
-        id,
+        ...priorState,
         name,
         description,
         valid: {
@@ -59,23 +60,23 @@ describe('Cheese', () => {
       // arrange
       const id = uuid();
       const from = new Date('2010-01-01');
-      const to = new Date('2010-02-02')
+      const date = new Date('2010-02-02')
       const subject = new Cheese({ id })
         .add({ name: 'name', description: 'desc', date: from })
         .clearUnpublishedEvents();
+      const priorState = subject.toJSON();
 
       // act
-      subject.remove({ date: to });
+      subject.remove({ date });
 
       // assert
-      expect(subject.getValid()).toEqual({
-        from,
-        to,
+      expect(subject.toJSON()).toEqual({
+        ...priorState,
+        valid: { from, to: date },
       });
       expect(subject.getUnpublishedEvents()).toEqual([{
         event: CheeseRemoved,
-        id,
-        date: to,
+        id, date,
       }]);
     });
   });
