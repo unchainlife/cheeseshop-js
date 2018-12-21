@@ -17,6 +17,8 @@
     "test": "jest --notify --notifyMode fail-change"
   },
   "dependencies": {
+    "@babel/preset-env": "^7.2.3",
+    "cheesy-messages": "../cheesy-messages/",
     "immutable": "^4.0.0-rc.12",
     "uuid": "^3.3.2"
   },

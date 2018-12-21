@@ -14,7 +14,7 @@
     "lib"
   ],
   "scripts": {
-    "test": "echo \"Error: run tests from root\" && exit 1"
+    "test": ""
   },
   "devDependencies": {
     "@babel/core": "^7.2.2",
@@ -24,5 +24,8 @@
     "babel-jest": "^23.6.0",
     "jest": "^23.6.0",
     "regenerator-runtime": "^0.13.1"
+  },
+  "dependencies": {
+    "@babel/preset-env": "^7.2.3"
   }
 }

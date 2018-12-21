@@ -9,6 +9,8 @@ module.exports = {
   CheeseReceive: 'Cheese:Receive',
   CheeseDispatch: 'Cheese:Dispatch',
   // Events
+  CheeseAdded: 'Cheese:Added',
+  CheeseRemoved: 'Cheese:Removed',
   CheeseProduced: 'Cheese:Produced',
   CheeseDestroyed: 'Cheese:Destroyed',
   CheeseReceived: 'Cheese:Received',

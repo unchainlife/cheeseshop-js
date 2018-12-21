@@ -1,6 +1,8 @@
 const uuid = require('uuid/v4');
 const { fromJS, Map } = require('immutable');
 
+const { CheeseAdded, CheeseRemoved } = require('cheesy-messages');
+
 const ID = 'id';
 const NAME = 'name';
 const DESCRIPTION = 'description';
@@ -25,6 +27,23 @@ function Cheese({ id = uuid() } = {}) {
   this.getState = () => _state;
   this.toJSON = () => _state.toJS();
 
+  // Events ----------------------------------------------------------------------------------------
+
+  let _unpublishedEvents = [];
+
+  this.getUnpublishedEvents = () => _unpublishedEvents.slice();
+  this.clearUnpublishedEvents = () => {
+    _unpublishedEvents = [];
+    return this;
+  };
+  function raise(event, args) {
+    _unpublishedEvents.push({
+      event,
+      id: _state.get(ID),
+      ...args,
+    })
+  }
+
   // Properties ------------------------------------------------------------------------------------
 
   this.getId = () => _state.get(ID);
@@ -43,6 +62,7 @@ function Cheese({ id = uuid() } = {}) {
    *
    * @returns {this}
    */
+
   this.add = ({ name, description, date = new Date() } = {}) => {
     // param validation
     if (typeof name !== 'string' || name.length === 0) throw new Error('Invalid Argument: name');
@@ -61,6 +81,8 @@ function Cheese({ id = uuid() } = {}) {
       }),
     });
 
+    raise(CheeseAdded, { name, description, date });
+
     // return for fluent style
     return this;
   };
@@ -72,6 +94,7 @@ function Cheese({ id = uuid() } = {}) {
    *
    * @returns {this}
    */
+
   this.remove = ({ date = new Date() }) => {
     const { from, to } = this.getValid();
     if (from === null) throw new Error('Cannot remove when not added');
@@ -79,6 +102,8 @@ function Cheese({ id = uuid() } = {}) {
     if (date < from) throw new Error('Invalid Argument: from');
 
     _state = _state.setIn([VALID, TO], date);
+
+    raise(CheeseRemoved, { date });
 
     return this;
   };
