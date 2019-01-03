@@ -1,9 +1,7 @@
 const uuid = require('uuid/v4');
 const { fromJS, Map, Record } = require('immutable');
-
 const { CheeseAdded, CheeseRemoved } = require('cheesy-messages');
-
-import Stock from './stock';
+const Stock = require('./stock');
 
 const ID = 'id';
 const NAME = 'name';
@@ -33,7 +31,6 @@ function Cheese({ id = uuid() } = {}) {
   // Events ----------------------------------------------------------------------------------------
 
   let _unpublishedEvents = [];
-
   this.getUnpublishedEvents = () => _unpublishedEvents.slice();
   this.clearUnpublishedEvents = () => {
     _unpublishedEvents = [];
@@ -42,9 +39,9 @@ function Cheese({ id = uuid() } = {}) {
   function raise(event, args) {
     _unpublishedEvents.push({
       event,
-      id: _state.get(ID),
       ...args,
-    })
+      id: _state.get(ID),
+    });
   }
 
   // Properties ------------------------------------------------------------------------------------

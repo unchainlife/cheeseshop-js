@@ -52,6 +52,14 @@ function Stock({ id = uuid() } = {}) {
     return this;
   };
 
+  function raise(event, args) {
+    _unpublishedEvents.push({
+      event,
+      id: _state.get(ID),
+      ...args,
+    })
+  }
+
   // Properties ------------------------------------------------------------------------------------
 
   this.getId = () => _state.get(ID);
@@ -81,17 +89,11 @@ function Stock({ id = uuid() } = {}) {
       .update(NEXT_LINE_ID, x => x + 1);
 
     // Domain Events
-    _unpublishedEvents.push({
-      event: CheeseProduced,
-      id,
+    raise(CheeseProduced, {
       lineId: line.get(ID),
       cheese: cheese.getReference(),
-      uom,
-      measure,
-      quantity,
-      expiresOn,
-      date,
-    })
+      uom, measure, quantity, expiresOn, date,
+    });
     return this;
   }
 

@@ -61,13 +61,15 @@ describe('Cheese', () => {
           },
         });
 
-        expect(subject.getUnpublishedEvents()).toEqual([{
-          event: CheeseAdded,
-          id,
-          name,
-          description,
-          date,
-        }]);
+        expect(subject.getUnpublishedEvents()).toEqual([
+          {
+            event: CheeseAdded,
+            id,
+            name,
+            description,
+            date,
+          }
+        ]);
       });
     });
   });
