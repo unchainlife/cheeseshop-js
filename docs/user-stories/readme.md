@@ -2,6 +2,19 @@
 
 The following is a set of User Stories to define the Domain for the Cheese Shop
 
+The Basic Premise is that we have a business which operates a number of Cheese
+Shops.  The company makes it's own and buys cheese, which it distributes between
+it's Stores,  they are sold to the public.  They already have a Retail EPOS
+System and public website, which they do not want to change, but they would like
+better control over the stock.
+
+Their EPOS system is a good value system, and the firm behind it have said they
+can do some limited integrations, if needed.
+
+The company website was written in PHP by the boss's son.  It's very simple, but
+serviceable. He's more interested in the creative website and adding this to his
+resume, but is keen to put live stock information up.
+
 ## Roles
 
 1. Company - A top level role used to set the overall goal, and group all employees
@@ -14,22 +27,17 @@ stock levels and dispatching goods.
 ## Deliverables
 
 1. REST API
-1. React App
+1. Mobile Only React App
 1. Document DB Storage
 
 ## Entities
 
-1. Cheese
-1. Location
-1. Stock
+1. Cheese - A product
+1. Stock - Real world instances of Cheese
+1. Location - A place where Cheese is stored
+1. Transfer - An order to move Cheese to another Location
 
 ## Stories
-
-The Basic Premise is that we have a business which operates a number of Cheese
-Shops.  The company makes it's own cheeses and distributes them to the Stores,
-where they are sold to the public.  They already have a Retail EPOS System,
-which they do not want to change, but they would like better control over the
-stock.
 
 * As a Company I want to make/buy/stock Cheese, so that I can sell it
   * As an Admin I want to configure the System correctly, so that we can sell cheese
@@ -38,6 +46,7 @@ stock.
       * As an Admin I want to add a Vehicle, so that we can store cheese in transit
     * As an Admin I want to Close a Location, so that it is no longer used
     * As an Admin I want to Block a Location, so that new Transfers cannot be received
+    * As an Admin I want to Adjust a Location, so that it can be corrected/amended
   * As a Worker I want to manage the System, so that we can sell cheese
     * As a Worker I want to manage Cheese
       * As a Worker I want to Add a new Cheese
