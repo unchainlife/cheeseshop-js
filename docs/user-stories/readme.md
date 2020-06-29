@@ -68,3 +68,10 @@ stock levels and dispatching goods.
     * As a Courier I want to Pickup Stock, so that I can deliver it
     * As a Courier I want to Deliver Stock, so that I can mark it as arrived
 * As a Customer I want to know if a Store has Cheese in stock, so that I can avoid an unnecessary trip.
+
+## Rules
+
+1. State and Behaviour should be bound together.  To separate them creates an anemic Domain Model.  It makes it unclear what behaviour is available and current.
+1. State should be encapsulated, to avoid unexpected changes by external parties.  All state mutations pass through a single interface.
+1. State should be immutable, to avoid unexpected side-effects and reduce defects.
+1. Don't create Aggregate Roots.  An AR should be created by another AR.  For example, Stock and Transfers should be created by a Location.  When the top-most ARs is uncovered, that should either already exist within the system, having been seeded when the application was created, or be an abstracted Root component.
