@@ -93,6 +93,10 @@ repository pattern.
 
 ### Mutate (within a transaction)
 
+This method will load an entity from the database, perform an operation upon it
+and then save the entity back to the database, all within a transaction.  If the
+transaction fails then an exception will be raised.
+
 ```
   const repo = new Repository(...);
   await repo.execute(
@@ -102,12 +106,18 @@ repository pattern.
 ```
 
 ### Get a single Record
+
+Loads a single record from the database, using the primary key.
+
 ```
   const repo = new Repository(...);
   const products = await repo.get({ Product: { productId: 123 } });
 ```
 
 ### Get Multiple Records
+
+Loads multiple records from the database in a single hit, using their primary key.
+
 ```
   const repo = new Repository(...);
   const products = await repo.get({
@@ -123,6 +133,9 @@ repository pattern.
 ```
 
 ### Query (within a paritition)
+
+Queries multiple records within the same paritition.
+
 ```
   const repo = new Repository(...);
   const products = await repo.query(
@@ -132,6 +145,9 @@ repository pattern.
 ```
 
 ### Cross Partition Scan (across parititions)
+
+Queries multiple records across many parititions.
+
 ```
   const repo = new Repository(...);
   const products = repo.scan(
@@ -140,6 +156,11 @@ repository pattern.
 ```
 
 ### Spawn Child Records
+
+As with mutation, this will load an entity from the database, perform and action
+and then save the subject and child record back to the database in a single
+transaction.
+
 ```
   const repo = new Repository(...);
   await repo.spawn(
