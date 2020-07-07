@@ -1,5 +1,5 @@
-const Cheese = require('./cheese');
+const Entities = require('./Entities');
 
 module.exports = {
-  Cheese,
+  ...Entities
 };
