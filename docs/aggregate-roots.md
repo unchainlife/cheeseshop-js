@@ -21,37 +21,65 @@
     this.getEvents = () => deepCopy(_events);
     this.clearEvents = () => { _events = []; };
 
+    this.getKey = () => ({ personId: _state.personId });
+
     /**
      * rename Person
      * @param {string} givenName
      * @param {string} familyName
      */
 
-    this.rename = ({ givenName, familyName }) => {
-      // Validate input
-      if (!givenName || !familyName) throw new Error('Invalid Name');
+    this.rename = ({ givenName, familyName } = {}) => {
+      Joi.string().required().validate(givenName);
+      Joi.string().required().validate(familyName);
 
-      // Capture current state for event
-      const oldGivenName = _state.givenName;
-      const oldFamilyName = _state.familyName;
+      _state = { ..._state, givenName, familyName };
 
-      // Mutate state
-      _state = {
-        ..._state,
-        name
-      };
+      _events.push({ type: 'PERSON_RENAMED', givenName, familyName });
 
-      // Push event
-      _events.push({
-        type: 'PERSON_RENAMED',
-        givenName: { oldValue: oldGivenName, newValue: givenName },
-        familyName: { oldValue: oldFamilyName, newValue: familyName }
-      });
-
-      // Return AR, to allow chaining
       return this;
     };
+
+    this.getName = () => ({ givenName: _state.givenName, familyName: _state.familyName });
+
+    /**
+     * Set a person's age
+     * @param {number} age
+     */
+
+    this.setAge = ({ age } = {}) => {
+      Joi.number().integer().min(0).max(200).validate(age);
+      if (age < 0 || age > 999) throw new Error('Invalid Age');
+
+      _state = { ..._state, age };
+
+      _events.push({ type: 'PERSON_AGE_SET', age });
+
+      return this;
+    };
+
+    this.getAge = () => _state.age;
   }
+```
+```
+  const subject = new Person({ personId: 1234 })
+    .rename({ givenName: 'Chris', familyName: 'Kemp' })
+    .setAge({ age: 21 }); // don't laugh!
+
+  console.log(subject.getKey());
+  // { personId: 1234 }
+
+  console.log(subject.getName());
+  // { givenName: 'Chris', familyName: 'Kemp' }
+
+  console.log(subject.getAge());
+  // 21
+
+  console.log(subject.getState());
+  // { personId: 1234, givenName: 'Chris', familyName: 'Kemp', age: 21 }
+
+  subject.setAge({ age: -1 }); // ERROR!
+  subject.rename({ givenName: null, familyName: 33 }); // ERROR!
 ```
 
 ## Repositories
