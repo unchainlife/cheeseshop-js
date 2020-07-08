@@ -9,7 +9,7 @@ Each cheese has the following properties:
 | Property    | Type                        | Validation        | Description                                                                   |
 |-------------|-----------------------------|-------------------|-------------------------------------------------------------------------------|
 | Code        | string                      | [a-z]{3,}         | Key: Unique Code for Cheese                                                   |
-| Version     | int                         | 1+                | Key: Version number for Cheese                                                |
+| Version     | int                         | default: 1        | Key: Version number for Cheese.                                               |
 | Name        | string                      | Required          | A descriptive name for the Cheese (e.g. Cheddar)                              |
 | Description | string                      | Required          | A long description, using markdown                                            |
 | Category    | enum(Hard,Soft,Spreadable)  | Required          | Classification information                                                    |
