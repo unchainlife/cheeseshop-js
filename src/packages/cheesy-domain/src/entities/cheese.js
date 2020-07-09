@@ -8,31 +8,33 @@ function Cheese(initialState) {
     this.getEvents = () => cloneDeep(_events);
     this.clearEvents = () => { _events = []; };
 
-    this.add = ({ name, description, lifespan, smelly }) => {
-        // Validate input
-        if (typeof name !== 'string' || name.length === 0) throw new Error('Invalid Argument: name');
-        if (typeof description !== 'string' || description.length === 0) throw new Error('Invalid Argument: description');
-        if (typeof lifespan !== 'number' || lifespan <= 0) throw new Error('Invalid Argument: lifespan');
-        if (typeof smelly !== 'boolean') throw new Error('Invalid Argument: smelly');
+    // Properties ------------------------------------------------------------------------------------
+
+    this.getName = () => _state.name;
+    this.getDescription = () => _state.description;
+    this.getLifeSpan = () => _state.lifespan;
+    this.getSmelly = () => _state.smelly;
+    this.getActive = () => _state.active;
+
+    this.setInactive = () => {
+
+        if (_state.active === false) throw new Error('Cheese already inactive');
 
         // Mutate state
         _state = {
             ..._state,
-            name,
-            description,
-            lifespan,
-            smelly
+            active: false
         };
 
         // Push event
         _events.push({
-            type: 'CHEESE_CREATED',
-            name,
-            description,
-            lifespan,
-            smelly
+            type: 'CHEESE_REMOVED',
+            active: { oldValue: true, newValue: false }
         });
-    };
+
+        return this;
+    }
+
 }
 
 module.exports = Cheese;

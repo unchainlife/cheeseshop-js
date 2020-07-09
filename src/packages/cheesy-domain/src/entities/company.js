@@ -1,4 +1,4 @@
-const { cloneDeep } = require('lodash');
+const { cloneDeep, filter } = require('lodash');
 const Cheese = require('./cheese');
 
 function Company(initialState) {
@@ -9,55 +9,17 @@ function Company(initialState) {
   this.getEvents = () => cloneDeep(_events);
   this.clearEvents = () => { _events = []; };
 
-  this.createCompany = ({ companyName, cheeses }) => {
+  this.createCheese = ( { name, description, lifespan, smelly, active } ) => {
+
     // Validate input
-    if (typeof companyName !== 'string' || companyName.length === 0) throw new Error('Invalid Argument: companyName');
-    if (typeof cheeses === 'undefined') cheeses = [];
+    if (typeof name !== 'string' || name.length === 0) throw new Error('Invalid Argument: name');
+    if (typeof description !== 'string' || description.length === 0) throw new Error('Invalid Argument: description');
+    if (typeof lifespan !== 'number' || lifespan <= 0) throw new Error('Invalid Argument: lifespan');
+    if (typeof smelly !== 'boolean') throw new Error('Invalid Argument: smelly');
 
-    // Mutate state
-    _state = {
-      ..._state,
-      companyName,
-      cheeses
-    };
+    let cheese = new Cheese({ name, description, lifespan, smelly, active });
 
-    // Push event
-    _events.push({
-      type: 'COMPANY_CREATED',
-      companyName,
-      cheeses
-    });
-
-  };
-
-  this.rename = ({ companyName }) => {
-    // Validate input
-    if (!companyName) throw new Error('Invalid Company Name');
-
-    // Capture current state for event
-    const oldCompanyName = _state.companyName;
-
-    // Mutate state
-    _state = {
-      ..._state,
-      companyName
-    };
-
-    // Push event
-    _events.push({
-      type: 'COMPANY_RENAMED',
-      companyName: { oldValue: oldCompanyName, newValue: companyName }
-    });
-
-    // Return AR, to allow chaining
-    return this;
-  };
-
-  this.makeCheese = ( cheeseProps ) => {
-    let cheese = new Cheese();
-    cheese.add({ ...cheeseProps });
-
-    const oldCheeses = _state.cheeses;
+    const oldCheeses = _state.cheeses ? _state.cheeses : [];
 
     let newCheeses = oldCheeses;
     newCheeses.push(cheese);
@@ -70,7 +32,7 @@ function Company(initialState) {
 
     // Push event
     _events.push({
-      type: 'CHEESE_MADE',
+      type: 'CHEESE_CREATED',
       cheeses: { oldValue: oldCheeses, newValue: newCheeses }
     });
 
@@ -78,12 +40,21 @@ function Company(initialState) {
     return this;
   };
 
-  this.addCheese = ( cheese ) => {
+  this.removeCheese = ({ name }) => {
+    if (typeof name !== 'string' || name.length === 0) throw new Error('Invalid Argument: name');
 
     const oldCheeses = _state.cheeses;
 
-    let newCheeses = oldCheeses;
-    newCheeses.push(cheese);
+    if (oldCheeses && oldCheeses.length === 0){
+      throw new Error('No cheeses to remove');
+    }
+
+    const newCheeses = filter(oldCheeses, function (cheese) {
+      if(cheese.getName() === name){
+          cheese.setInactive()
+      }
+      return cheese;
+    });
 
     // Mutate state
     _state = {
@@ -93,12 +64,13 @@ function Company(initialState) {
 
     // Push event
     _events.push({
-      type: 'CHEESE_ADDED',
+      type: 'CHEESE_REMOVED',
       cheeses: { oldValue: oldCheeses, newValue: newCheeses }
     });
 
     // Return AR, to allow chaining
     return this;
+
   };
 
 }
